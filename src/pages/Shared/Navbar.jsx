@@ -46,7 +46,7 @@ const Navbar = () => {
                         to="/"
                         className={`hover:text-yellow-300 transition ${isActive('/') ? 'font-bold text-yellow-500' : ''}`}
                     >
-                        Dashboard
+                        Home
                     </Link>
 
 
@@ -118,10 +118,10 @@ const Navbar = () => {
                     {/* ) : ( */}
                     <div className="flex space-x-4">
                         <Link
-                            to="/signin"
+                            to="/login"
                             className={`text-black hover:text-slate-50 transition ${isActive('/signin') ? 'font-bold text-yellow-500' : ''}`}
                         >
-                            Sign In
+                            Log In
                         </Link>
                         <Link
                             to="/register"
