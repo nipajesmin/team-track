@@ -1,12 +1,12 @@
 //import React, { useContext, useEffect, useState } from 'react';
-//import { Link, useLocation } from 'react-router-dom';
-//import Authcontext from '../context/Authcontext';
-import { Link } from 'react-router-dom';
-import React, { useState } from 'react';
+
+import { Link, useLocation } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
 import logo from '../../../public/logo.png'
+import { AuthContext } from '../../providers/AuthProvider';
 const Navbar = () => {
-    // const { user, signOutUser } = useContext(Authcontext);
-    // const location = useLocation();
+     const { user, signOutUser } = useContext(AuthContext);
+     const location = useLocation();
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
 
@@ -50,12 +50,12 @@ const Navbar = () => {
                     </Link>
 
 
-                    {/* <Link
-                    to="/allFoods"
+                    <Link
+                    to="/dashboard"
                     className={`hover:text-yellow-300 transition ${isActive('/allSportsEquipment') ? 'font-bold text-yellow-500' : ''}`}
                 >
-                    All Foods
-                </Link> */}
+                    Dashboard
+                </Link>
                     {/* <Link
                     to="/gallery"
                     className={`hover:text-yellow-300 transition ${isActive('/allSportsEquipment') ? 'font-bold text-yellow-500' : ''}`}
@@ -67,13 +67,13 @@ const Navbar = () => {
                 </div>
                 {/* User Section */}
                 <div className="mt-4 md:mt-0 flex items-center space-x-4 relative">
-                    {/* {user && user.email ? ( */}
+                    {user && user.email ? (
                     <div className="relative">
                         <img
-                            // src={user?.photoURL}
+                            src={user?.photoURL}
                             alt="User"
                             className="h-8 w-8 rounded-full object-cover cursor-pointer"
-                            // title={user?.displayName || 'User'} // Tooltip with user's name
+                            title={user?.displayName || 'User'} // Tooltip with user's name
                             onClick={toggleDropdown} // Toggle dropdown on click
                         />
                         {/* Dropdown Menu */}
@@ -82,27 +82,14 @@ const Navbar = () => {
                                 className="absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg z-10"
                                 onMouseLeave={closeDropdown} // Optional: Close dropdown when mouse leaves
                             >
-                                <Link
+                                {/* <Link
                                     to="/myFood"
                                     className="block px-4 py-2 hover:bg-gray-200 transition"
                                     onClick={closeDropdown} // Close dropdown on link click
                                 >
                                     My Foods
-                                </Link>
-                                <Link
-                                    to="/addFood"
-                                    className="block px-4 py-2 hover:bg-gray-200 transition"
-                                    onClick={closeDropdown} // Close dropdown on link click
-                                >
-                                    Add Food
-                                </Link>
-                                <Link
-                                    to="/myOrders"
-                                    className="block px-4 py-2 hover:bg-gray-200 transition"
-                                    onClick={closeDropdown} // Close dropdown on link click
-                                >
-                                    My Orders
-                                </Link>
+                                </Link> */}
+                                
                                 <button
                                     onClick={() => {
                                         signOutUser();
@@ -115,7 +102,7 @@ const Navbar = () => {
                             </div>
                         )}
                     </div>
-                    {/* ) : ( */}
+                     ) : ( 
                     <div className="flex space-x-4">
                         <Link
                             to="/login"
@@ -130,7 +117,7 @@ const Navbar = () => {
                             Register
                         </Link>
                     </div>
-                    {/* )} */}
+                     )} 
 
                 </div>
             </div>
