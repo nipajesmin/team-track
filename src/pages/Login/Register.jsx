@@ -31,61 +31,48 @@ const Register = () => {
     const onSubmit = async (data) => {
         console.log("Form Data Submitted:", data);
         setUploading(true);
-    
-        // Upload image to imgbb
+
         const formData = new FormData();
-        formData.append('image', data.photo[0]); // Get the uploaded file
-    
+        formData.append('image', data.photo[0]);
+
         try {
             const response = await fetch(image_hosting_api, {
                 method: 'POST',
                 body: formData,
             });
-    
+
             const result = await response.json();
             if (result.success) {
-                const photoURL = result.data.display_url; // Get the uploaded image URL
-    
-                // Create user with email and password
+                const photoURL = result.data.display_url;
+
                 createUser(data.email, data.password)
-                    .then((result) => {
-                        const loggedUser = result.user;
-    
-                        // Update user profile with name and photo URL
+                    .then(() => {
                         updateUserProfile({ displayName: data.name, photoURL })
                             .then(() => {
-                                // Create user entry in database
                                 const userInfo = {
                                     name: data.name,
                                     email: data.email,
                                     role: data.role,
-                                    photoURL, // Image URL from imgbb
-                                   
+                                    photoURL,
+                                    bank_account_no: data.bank_account_no,
+                                    salary: data.salary,
+                                    designation: data.designation,
+                                    verified_status: false, // Default value
                                 };
-    
+
                                 axiosPublic.post('/users', userInfo)
                                     .then(res => {
                                         if (res.data.insertedId) {
-                                            console.log('User added to the database');
                                             toast.success('Registration successful!', { position: 'top-center' });
                                             reset();
-                                            setTimeout(() => {
-                                                navigate('/');
-                                            }, 3000);
+                                            setTimeout(() => navigate('/'), 3000);
                                         }
                                     })
-                                    .catch(error => {
-                                        console.error('Error saving user to database:', error);
-                                        toast.error('Failed to save user to database.', { position: 'top-center' });
-                                    });
+                                    .catch(error => toast.error('Failed to save user to database.', { position: 'top-center' }));
                             })
-                            .catch((error) => {
-                                toast.error(error.message, { position: 'top-center' });
-                            });
+                            .catch(error => toast.error(error.message, { position: 'top-center' }));
                     })
-                    .catch((error) => {
-                        toast.error(error.message, { position: 'top-center' });
-                    });
+                    .catch(error => toast.error(error.message, { position: 'top-center' }));
             } else {
                 toast.error('Image upload failed. Please try again.', { position: 'top-center' });
             }
@@ -95,7 +82,8 @@ const Register = () => {
             setUploading(false);
         }
     };
-    
+
+
 
     return (
         <div>
@@ -183,6 +171,43 @@ const Register = () => {
                             </select>
                             {errors.role && <span className="text-red-600">Role is required</span>}
                         </div>
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Bank Account Number</span>
+                            </label>
+                            <input
+                                type="text"
+                                {...register("bank_account_no", { required: true })}
+                                placeholder="Bank Account Number"
+                                className="input input-bordered"
+                            />
+                            {errors.bank_account_no && <span className="text-red-600">Bank account number is required</span>}
+                        </div>
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Salary</span>
+                            </label>
+                            <input
+                                type="number"
+                                {...register("salary", { required: true })}
+                                placeholder="Salary"
+                                className="input input-bordered"
+                            />
+                            {errors.salary && <span className="text-red-600">Salary is required</span>}
+                        </div>
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Designation</span>
+                            </label>
+                            <input
+                                type="text"
+                                {...register("designation", { required: true })}
+                                placeholder="Designation"
+                                className="input input-bordered"
+                            />
+                            {errors.designation && <span className="text-red-600">Designation is required</span>}
+                        </div>
+
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Password</span>

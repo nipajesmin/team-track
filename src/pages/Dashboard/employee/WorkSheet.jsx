@@ -3,30 +3,37 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { AuthContext } from '../../../providers/AuthProvider';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import useTask from '../../../hooks/useTask';
 
 
 const WorkSheet = () => {
-    const [tasks, setTasks] = useState([]);
+    const { user } = useContext(AuthContext);
+    const axiosSecure = useAxiosSecure();
+    const [tasks, refetch] = useTask();
+
+    //  const [tasks, setTasks] = useState([]);
+    //  const [,refetch] = useTask();
     const [formData, setFormData] = useState({
         task: 'Sales',
         hoursWorked: '',
         date: new Date(),
     });
-    const { user } = useContext(AuthContext);
 
-    useEffect(() => {
-        if (user?.email) {
-            const fetchTasks = async () => {
-                try {
-                    const response = await axios.get(`http://localhost:3000/tasks?email=${user.email}`);
-                    setTasks(response.data);
-                } catch (error) {
-                    console.error('Error fetching tasks:', error);
-                }
-            };
-            fetchTasks();
-        }
-    }, [user?.email]);
+
+    // useEffect(() => {
+    //     if (user?.email) {
+    //         const fetchTasks = async () => {
+    //             try {
+    //                 const response = await axios.get(http://localhost:3000/tasks?email=${user.email});
+    //                 setTasks(response.data);
+    //             } catch (error) {
+    //                 console.error('Error fetching tasks:', error);
+    //             }
+    //         };
+    //         fetchTasks();
+    //     }
+    // }, [user?.email]);
 
 
 
@@ -47,13 +54,13 @@ const WorkSheet = () => {
             const taskData = { ...formData, email: user.email, date: formData.date.toISOString() };
 
             try {
-                const response = await axios.post('http://localhost:3000/tasks', taskData);
-
-                // Prepend the new task to the tasks array
-                setTasks((prevTasks) => [response.data, ...prevTasks]);
+                await axiosSecure.post('tasks', taskData);
 
                 // Reset the form
                 setFormData({ task: 'Sales', hoursWorked: '', date: new Date() });
+
+                // Trigger refetch to reload tasks
+                refetch();
             } catch (error) {
                 console.error('Error adding task:', error);
             }
@@ -63,11 +70,12 @@ const WorkSheet = () => {
 
 
 
+
     const handleDelete = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:3000/tasks/${id}`);
+            const response = await axiosSecure.delete(`/tasks/${id}`);
             if (response.status === 200) {
-                setTasks((prevTasks) => prevTasks.filter((task) => task._id !== id));
+                refetch(); // Refetch tasks after deletion
             }
         } catch (error) {
             console.error('Error deleting task:', error);
@@ -151,7 +159,7 @@ const WorkSheet = () => {
                 </thead>
                 <tbody>
                     {tasks.map((task) => (
-                        
+
                         <tr key={task._id} className="hover:bg-gray-100">
                             <td className="border border-gray-300 px-4 py-2">{task.task}</td>
                             <td className="border border-gray-300 px-4 py-2">{task.hoursWorked}</td>
@@ -182,4 +190,5 @@ const WorkSheet = () => {
     );
 };
 
-export default WorkSheet;
+export default WorkSheet;
+
