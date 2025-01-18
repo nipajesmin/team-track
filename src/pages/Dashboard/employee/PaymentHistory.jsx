@@ -1,0 +1,12 @@
+
+
+const PaymentHistory = () => {
+   
+    return (
+        <div>
+            this is payment page
+        </div>
+    );
+};
+
+export default PaymentHistory;

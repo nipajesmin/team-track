@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../providers/AuthProvider';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import GoogleLogin from './GoogleLogin';
 
 const Login = () => {
     const { signInUser,setUser, signInWithGoogle } = useContext(AuthContext);
@@ -37,6 +38,19 @@ const Login = () => {
                 const errorMessage = error.message;
             });
     };
+    // const handleGoogleSignIn = () => {
+    //     signInWithGoogle()
+    //         .then(result => {
+    //             const user = result.user;
+    //             //  console.log(result.user);
+    //             navigate('/');
+    //         })
+    //         .catch(error => {
+    //             //  console.log('ERROR', error.message)
+    //             const errorMessage = error.message;
+    //         })
+    // }
+
     return (
         <div>
             <ToastContainer />
@@ -83,14 +97,15 @@ const Login = () => {
                                 </button>
                             </div>
                             <div className="form-control mt-6">
-                                <button
-                                    // onClick={handleGoogleSignIn}
+                                {/* <button
+                                     onClick={handleGoogleSignIn}
                                     type="button"
                                     className="bg-violet-900 text-white btn"
                                 // disabled={loading}
                                 >
                                     Sign in with Google
-                                </button>
+                                </button> */}
+                                <GoogleLogin></GoogleLogin>
                             </div>
 
                             <p className="text-sm text-center mt-2">

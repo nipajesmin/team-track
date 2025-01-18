@@ -1,14 +1,20 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../providers/AuthProvider';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useAxiosPublic from '../../hooks/useAxiosPublic';
+
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`
 
 const Register = () => {
 
-    const { createUser,updateUserProfile } = useContext(AuthContext);
+    const axiosPublic = useAxiosPublic();
+    const { createUser, updateUserProfile } = useContext(AuthContext);
     const navigate = useNavigate();
+    const [uploading, setUploading] = useState(false);
 
     const {
         register,
@@ -18,27 +24,79 @@ const Register = () => {
         formState: { errors },
     } = useForm()
 
-    const onSubmit = data => {
-        console.log(data)
-        createUser(data.email, data.password)
-            .then(result => {
-                //  console.log(result.user);
-                const loggedUser = result.user;
-                console.log(loggedUser)
-                toast.success('Registration successful!', { position: 'top-center' });
-                 updateUserProfile({ displayName: data.name, photoURL: data.url })
-                     .then(() => {
-                        reset();
-                         setTimeout(() => {
-                             navigate('/');
-                         }, 3000);
-                     })
-                    .catch(error => {
-                             toast.error(error.message, { position: 'top-center' });
-                    });
-            })
+    // Imgbb API key
+    //const imgbbApiKey = 'YOUR_IMGBB_API_KEY';
 
-    }
+
+    const onSubmit = async (data) => {
+        console.log("Form Data Submitted:", data);
+        setUploading(true);
+    
+        // Upload image to imgbb
+        const formData = new FormData();
+        formData.append('image', data.photo[0]); // Get the uploaded file
+    
+        try {
+            const response = await fetch(image_hosting_api, {
+                method: 'POST',
+                body: formData,
+            });
+    
+            const result = await response.json();
+            if (result.success) {
+                const photoURL = result.data.display_url; // Get the uploaded image URL
+    
+                // Create user with email and password
+                createUser(data.email, data.password)
+                    .then((result) => {
+                        const loggedUser = result.user;
+    
+                        // Update user profile with name and photo URL
+                        updateUserProfile({ displayName: data.name, photoURL })
+                            .then(() => {
+                                // Create user entry in database
+                                const userInfo = {
+                                    name: data.name,
+                                    email: data.email,
+                                    role: data.role,
+                                    photoURL, // Image URL from imgbb
+                                   
+                                };
+    
+                                axiosPublic.post('/users', userInfo)
+                                    .then(res => {
+                                        if (res.data.insertedId) {
+                                            console.log('User added to the database');
+                                            toast.success('Registration successful!', { position: 'top-center' });
+                                            reset();
+                                            setTimeout(() => {
+                                                navigate('/');
+                                            }, 3000);
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error saving user to database:', error);
+                                        toast.error('Failed to save user to database.', { position: 'top-center' });
+                                    });
+                            })
+                            .catch((error) => {
+                                toast.error(error.message, { position: 'top-center' });
+                            });
+                    })
+                    .catch((error) => {
+                        toast.error(error.message, { position: 'top-center' });
+                    });
+            } else {
+                toast.error('Image upload failed. Please try again.', { position: 'top-center' });
+            }
+        } catch (error) {
+            toast.error('An error occurred while uploading the image.', { position: 'top-center' });
+        } finally {
+            setUploading(false);
+        }
+    };
+    
+
     return (
         <div>
 
@@ -81,7 +139,7 @@ const Register = () => {
                             />
                             {errors.email && <span className='text-red-600'>Email is required</span>}
                         </div>
-                        <div className="form-control">
+                        {/* <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Photo URL</span>
                             </label>
@@ -94,6 +152,36 @@ const Register = () => {
                               //  required
                             />
                             {errors.url && <span className='text-red-600'>url is required</span>}
+                        </div> */}
+                        {/* Photo Upload Field */}
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Upload Photo</span>
+                            </label>
+                            <input
+                                type="file"
+                                {...register('photo', { required: true })}
+                                accept="image/*"
+                                className="file-input file-input-bordered"
+                            />
+                            {errors.photo && <span className="text-red-600">Photo is required</span>}
+                        </div>
+                        {/* Role Dropdown */}
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Role</span>
+                            </label>
+                            <select
+                                {...register('role', { required: true })}
+                                className="select select-bordered"
+                            >
+                                <option value="" disabled selected>
+                                    Select your role
+                                </option>
+                                <option value="Employee">Employee</option>
+                                <option value="HR">HR</option>
+                            </select>
+                            {errors.role && <span className="text-red-600">Role is required</span>}
                         </div>
                         <div className="form-control">
                             <label className="label">
@@ -126,7 +214,7 @@ const Register = () => {
                         <div className="form-control mt-6">
                             <input className="btn btn-primary" type='submit' value="Register" />
                         </div>
-                        <div className="form-control mt-6">
+                        {/* <div className="form-control mt-6">
                             <button
                                 //        onClick={handleGoogleSignIn}
                                 type="button"
@@ -134,7 +222,7 @@ const Register = () => {
                             >
                                 Login with Google
                             </button>
-                        </div>
+                        </div> */}
                     </form>
                     <p className="ml-4 mb-4 pl-12">
                         Already have an account? Please <Link to="/signin" className="text-blue-600">SignIn</Link>
