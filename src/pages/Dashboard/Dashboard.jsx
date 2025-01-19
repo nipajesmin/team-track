@@ -1,9 +1,10 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { FaClipboard, FaHistory, FaUsers, FaUser, FaChartLine, FaList, FaMoneyCheck } from 'react-icons/fa';
+import useAdmin from '../../hooks/useAdmin';
 
 const Dashboard = () => {
-    const isAdmin = true;
+    const [isAdmin] = useAdmin();
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -15,7 +16,7 @@ const Dashboard = () => {
                         Dashboard
                     </div>
                     <ul className="p-4 space-y-4">
-                        {!isAdmin ? (
+                        {isAdmin ? (
                             <>
                                 <li>
                                     <NavLink
@@ -29,6 +30,33 @@ const Dashboard = () => {
                                         Admin Route
                                     </NavLink>
                                 </li>
+                                <li>
+                                    <NavLink
+                                        to="/dashboard/pay-roll"
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-2 px-4 py-2 rounded-md ${
+                                                isActive ? 'bg-violet-500' : 'hover:bg-violet-600'
+                                            }`
+                                        }
+                                    >
+                                        <FaMoneyCheck />
+                                        Payroll
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink
+                                        to="/dashboard/all-employee-list"
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-2 px-4 py-2 rounded-md ${
+                                                isActive ? 'bg-violet-500' : 'hover:bg-violet-600'
+                                            }`
+                                        }
+                                    >
+                                        <FaList />
+                                        All Employee List
+                                    </NavLink>
+                                </li>
+
                             </>
                         ) : (
                             <>
@@ -97,32 +125,8 @@ const Dashboard = () => {
                                         Progress
                                     </NavLink>
                                 </li>
-                                <li>
-                                    <NavLink
-                                        to="/dashboard/all-employee-list"
-                                        className={({ isActive }) =>
-                                            `flex items-center gap-2 px-4 py-2 rounded-md ${
-                                                isActive ? 'bg-violet-500' : 'hover:bg-violet-600'
-                                            }`
-                                        }
-                                    >
-                                        <FaList />
-                                        All Employee List
-                                    </NavLink>
-                                </li>
-                                <li>
-                                    <NavLink
-                                        to="/dashboard/pay-roll"
-                                        className={({ isActive }) =>
-                                            `flex items-center gap-2 px-4 py-2 rounded-md ${
-                                                isActive ? 'bg-violet-500' : 'hover:bg-violet-600'
-                                            }`
-                                        }
-                                    >
-                                        <FaMoneyCheck />
-                                        Payroll
-                                    </NavLink>
-                                </li>
+                                
+                                
                             </>
                         )}
                     </ul>
