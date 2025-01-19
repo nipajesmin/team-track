@@ -12,7 +12,7 @@ const EmployeeList = () => {
     const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
 
     // Fetch employees using useQuery
-    const { data: employees = [], refetch , isLoading, isError, error } = useQuery({
+    const { data: employees = [], refetch, isLoading, isError, error } = useQuery({
         queryKey: ['employees'],
         queryFn: async () => {
             const res = await axiosSecure.get('/users');
@@ -43,11 +43,38 @@ const EmployeeList = () => {
     };
 
     // Handle pay action
-    const handlePayAction = () => {
-        // Logic for processing payment (e.g., sending data to the backend)
-        console.log("Paying salary to:", selectedEmployee);
-        setIsModalOpen(false); // Close the modal after payment
+    const handlePayAction = async () => {
+        const month = document.querySelector('input[placeholder="Enter month (e.g., January)"]').value;
+        const year = document.querySelector('input[placeholder="Enter year (e.g., 2025)"]').value;
+    
+        if (!month || !year) {
+            toast.error('Please enter both month and year.');
+            return;
+        }
+    
+        const paymentRequest = {
+            employeeId: selectedEmployee._id,
+            name: selectedEmployee.name,
+            salary: selectedEmployee.salary,
+            month,
+            year,
+            status: 'Pending', // Initial status for approval
+        };
+    
+        try {
+            const response = await axiosSecure.post('/payroll-requests', paymentRequest);
+            if (response.status === 201) {
+                toast.success('Payment request created successfully.');
+                setIsModalOpen(false); // Close the modal
+            } else {
+                throw new Error('Failed to create payment request.');
+            }
+        } catch (error) {
+            toast.error('Error creating payment request.');
+            console.error(error);
+        }
     };
+    
 
     const handleToggleVerification = async (employee) => {
         const newStatus = !employee.verified_status; // Toggle the current status
@@ -55,7 +82,7 @@ const EmployeeList = () => {
             const response = await axiosSecure.patch(`/users/${employee._id}/verify`, {
                 verified_status: newStatus,
             });
-    
+
             if (response.status === 200) {
                 toast.success(`Verification status updated to ${newStatus ? 'Verified' : 'Not Verified'}`);
                 refetch(); // Refetch the data to reflect the change
@@ -65,7 +92,7 @@ const EmployeeList = () => {
             console.error(error);
         }
     };
-    
+
     return (
 
         <div className="container mx-auto p-4">
@@ -101,10 +128,19 @@ const EmployeeList = () => {
 
                             <td className="border border-gray-300 px-4 py-2">{employee.designation || 'N/A'}</td>
                             <td className="border border-gray-300 px-4 py-2">{employee.salary || 'N/A'}</td>
-                            <td className="border border-gray-300 px-4 py-2 text-center">
+                            {/* <td className="border border-gray-300 px-4 py-2 text-center">
                                 <button
                                     onClick={() => handlePay(employee)}
                                     className="btn btn-sm btn-success"
+                                >
+                                    PAY
+                                </button>
+                            </td> */}
+                            <td className="border border-gray-300 px-4 py-2 text-center">
+                                <button
+                                    onClick={() => handlePay(employee)}
+                                    className={`btn btn-sm ${employee.verified_status ? 'btn-success' : 'btn-gray'}`}
+                                    disabled={!employee.verified_status} // Disable button if not verified
                                 >
                                     PAY
                                 </button>
@@ -160,6 +196,7 @@ const EmployeeList = () => {
                     </div>
                 </div>
             )}
+
         </div>
     );
 };
