@@ -6,12 +6,15 @@ import {
     updateProfile
 } from "firebase/auth";
 import { app } from "../firebase/firebase.config";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 const auth = getAuth(app);
 
 export const AuthContext = createContext(null)
+
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
+    const axiosPublic = useAxiosPublic();
 
     const createUser = (email, password) => {
         setLoading(true);
@@ -29,7 +32,7 @@ const AuthProvider = ({ children }) => {
         const provider = new GoogleAuthProvider(); // Initialize the provider
         return signInWithPopup(auth, provider);
     };
-    
+
 
     const signOutUser = () => {
         setLoading(true);
@@ -45,28 +48,23 @@ const AuthProvider = ({ children }) => {
         const unSubscribe = onAuthStateChanged(auth, currentUser => {
 
             //  console.log('current User', currentUser);
-
-            // if (currentUser?.email) {
             setUser(currentUser);
-            //     const { data } = await axios.post('https://restaurant-management-server-tawny.vercel.app/jwt', {
-            //         email: currentUser?.email
-            //     },
-            //         {
-            //             withCredentials: true
-            //         }
+            if (currentUser?.email) {
+                // get token and store client side
 
-            //     )
+                const userInfo = { email: currentUser.email };
+                axiosPublic.post('/jwt', userInfo)
+                    .then(res => {
+                        if (res.data.token) {
+                            localStorage.setItem('access-token', res.data.token)
+                        }
+                    })
 
-            // }
-            // else{
-            //     setUser(currentUser);  
-            //     const { data } = await axios.get('https://restaurant-management-server-tawny.vercel.app/logout', 
-            //         {
-            //             withCredentials: true
-            //         }
-
-            //     )
-            // }
+            }
+            else {
+                // remover token from client side(maybe stored in local storage)
+                localStorage.removeItem('access-token')
+            }
             setLoading(false);
         })
         return () => {
