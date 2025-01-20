@@ -16,6 +16,22 @@ const PayRoll = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const axiosSecure = useAxiosSecure();
 
+    // useEffect(() => {
+    //     const fetchPayrollRequests = async () => {
+    //         try {
+    //             const response = await axiosSecure.get('/payroll-requests');
+    //             setPayrollRequests(response.data);
+    //             setIsLoading(false);
+    //         } catch (error) {
+    //             console.error('Error fetching payroll requests:', error);
+    //             toast.error('Failed to fetch payroll requests.');
+    //             setIsError(true);
+    //             setIsLoading(false);
+    //         }
+    //     };
+
+    //     fetchPayrollRequests();
+    // }, [axiosSecure]);
     useEffect(() => {
         const fetchPayrollRequests = async () => {
             try {
@@ -33,6 +49,7 @@ const PayRoll = () => {
         fetchPayrollRequests();
     }, [axiosSecure]);
 
+
     const handlePay = (request) => {
         setSelectedRequest(request);
         setIsModalOpen(true);
@@ -47,18 +64,47 @@ const PayRoll = () => {
     //     setIsModalOpen(false);
     //     toast.success('Payment successful.');
     // };
-    const handlePaymentSuccess = (requestId, paymentDate) => {
-        setPayrollRequests((prevRequests) =>
-            prevRequests.map((req) =>
-                req._id === requestId
-                    ? { ...req, status: 'Paid', paymentDate } // Update with actual payment date
-                    : req
-            )
-        );
+    // const handlePaymentSuccess = (requestId, paymentDate) => {
+    //     setPayrollRequests((prevRequests) =>
+    //         prevRequests.map((req) =>
+    //             req._id === requestId
+    //                 ? { ...req, status: 'Paid', paymentDate } // Update with actual payment date
+    //                 : req
+    //         )
+    //     );
+    //     setIsModalOpen(false);
+    //     toast.success('Payment successful.');
+    // };
+    const handlePaymentSuccess = async (requestId, paymentDate) => {
+        try {
+            // Send a request to update the status in the database
+            const response = await axiosSecure.patch(`/payroll-requests/${requestId}`, {
+                status: 'Paid',
+                paymentDate,
+            });
+
+            if (response.status === 200) {
+                // Update the local state
+                setPayrollRequests((prevRequests) =>
+                    prevRequests.map((req) =>
+                        req._id === requestId
+                            ? { ...req, status: 'Paid', paymentDate }
+                            : req
+                    )
+                );
+                toast.success('Payment successful and updated in the database.');
+            } else {
+                toast.error('Failed to update payroll request in the database.');
+            }
+        } catch (error) {
+            console.error('Error updating payroll request:', error);
+            toast.error('Error updating payroll request in the database.');
+        }
+
         setIsModalOpen(false);
-        toast.success('Payment successful.');
     };
-    
+
+
 
     if (isLoading) {
         return <div>Loading payroll requests...</div>;
@@ -99,6 +145,13 @@ const PayRoll = () => {
                                     {request.paymentDate || 'Not Paid'}
                                 </td>
                                 <td className="border border-gray-300 px-4 py-2 text-center">
+                                    {/* <button
+                                        className="btn btn-sm btn-success"
+                                        onClick={() => handlePay(request)}
+                                        disabled={request.status === 'Paid'}
+                                    >
+                                        {request.status === 'Paid' ? 'Paid' : 'Pay'}
+                                    </button> */}
                                     <button
                                         className="btn btn-sm btn-success"
                                         onClick={() => handlePay(request)}
@@ -106,6 +159,7 @@ const PayRoll = () => {
                                     >
                                         {request.status === 'Paid' ? 'Paid' : 'Pay'}
                                     </button>
+
                                 </td>
                             </tr>
                         ))}

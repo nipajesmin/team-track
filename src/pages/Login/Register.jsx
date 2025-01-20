@@ -66,7 +66,7 @@ const Register = () => {
 
                                 axiosPublic.post('/users', userInfo)
                                     .then(res => {
-                                        if (res.data.insertedId) {
+                                        if (res.data.result.insertedId) {
                                             toast.success('Registration successful!', { position: 'top-center' });
                                             reset();
                                             navigate('/');
