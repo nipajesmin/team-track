@@ -56,6 +56,7 @@ const EmployeeList = () => {
         const paymentRequest = {
             employeeId: selectedEmployee._id,
             name: selectedEmployee.name,
+            employeeEmail: selectedEmployee.email,
             salary: selectedEmployee.salary,
             month,
             year,
@@ -166,6 +167,7 @@ const EmployeeList = () => {
                 <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-96">
                         <h3 className="text-xl font-bold mb-4">Pay Employee</h3>
+                        <p className="mb-2"><strong>Email:</strong> {selectedEmployee.email}</p>
                         <p className="mb-2"><strong>Name:</strong> {selectedEmployee.name}</p>
                         <p className="mb-2"><strong>Salary:</strong> {selectedEmployee.salary}</p>
                         <div className="mb-4">

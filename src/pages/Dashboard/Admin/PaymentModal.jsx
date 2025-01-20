@@ -64,7 +64,7 @@ const PaymentModal = ({ request, onClose, onSuccess }) => {
             return;
         }
         else{
-            console.log('payment method', paymentMethod)
+          //  console.log('payment method', paymentMethod)
             setError('');
         }
     
@@ -80,7 +80,7 @@ const PaymentModal = ({ request, onClose, onSuccess }) => {
         }
     
         if (paymentIntent.status === "succeeded") {
-            console.log('transaction id', paymentIntent.id)
+          //  console.log('transaction id', paymentIntent.id)
             // Save payment details to the server
             const payment = {
                 email: user.email,
@@ -89,11 +89,16 @@ const PaymentModal = ({ request, onClose, onSuccess }) => {
                 date: new Date().toISOString(),
                 status: "paid",
                 requestId: request._id, // Assuming you want to link this payment to the request
+                employeeID: request.employeeId,
+                employeeName: request.name,
+                employeeEmail: request.employeeEmail,
+                month: request.month,
+                year: request.year,
             };
     
             try {
                 const res = await axiosSecure.post("/payments", payment);
-                console.log('payment saved',res);
+              //  console.log('payment saved',res);
                 if (res.data?.paymentResult?.insertedId) {
                     toast.success("Payment successful!");
                     onSuccess(request._id, new Date().toLocaleDateString()); // Notify parent component
@@ -107,7 +112,7 @@ const PaymentModal = ({ request, onClose, onSuccess }) => {
                     onClose(); // Close the modal
                 }
             } catch (error) {
-                console.error("Error saving payment details:", error);
+            //    console.error("Error saving payment details:", error);
                 setError("Failed to save payment details.");
             }
         }
