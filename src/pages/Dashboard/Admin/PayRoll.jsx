@@ -2,11 +2,18 @@ import React, { useEffect, useState } from 'react';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import PaymentModal from './PaymentModal'; // Create this component
+
+const stripePromise = loadStripe(import.meta.env.VITE_Payment_Gateway_PK); // Replace with your Stripe publishable key
 
 const PayRoll = () => {
     const [payrollRequests, setPayrollRequests] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
+    const [selectedRequest, setSelectedRequest] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const axiosSecure = useAxiosSecure();
 
     useEffect(() => {
@@ -26,6 +33,33 @@ const PayRoll = () => {
         fetchPayrollRequests();
     }, [axiosSecure]);
 
+    const handlePay = (request) => {
+        setSelectedRequest(request);
+        setIsModalOpen(true);
+    };
+
+    // const handlePaymentSuccess = (requestId, paymentDate) => {
+    //     setPayrollRequests((prevRequests) =>
+    //         prevRequests.map((req) =>
+    //             req._id === requestId ? { ...req, status: 'Paid', paymentDate } : req
+    //         )
+    //     );
+    //     setIsModalOpen(false);
+    //     toast.success('Payment successful.');
+    // };
+    const handlePaymentSuccess = (requestId, paymentDate) => {
+        setPayrollRequests((prevRequests) =>
+            prevRequests.map((req) =>
+                req._id === requestId
+                    ? { ...req, status: 'Paid', paymentDate } // Update with actual payment date
+                    : req
+            )
+        );
+        setIsModalOpen(false);
+        toast.success('Payment successful.');
+    };
+    
+
     if (isLoading) {
         return <div>Loading payroll requests...</div>;
     }
@@ -34,26 +68,6 @@ const PayRoll = () => {
         return <div>Error fetching payroll requests.</div>;
     }
 
-    const handlePay = async (request) => {
-        try {
-            const response = await axiosSecure.patch(`/payroll-requests/${request._id}`, {
-                paymentDate: new Date().toISOString(),
-            });
-    
-            if (response.status === 200) {
-                toast.success('Payment successful.');
-                setPayrollRequests((prevRequests) =>
-                    prevRequests.map((req) =>
-                        req._id === request._id ? { ...req, paymentDate: new Date().toISOString() } : req
-                    )
-                );
-            }
-        } catch (error) {
-            console.error('Error processing payment:', error);
-            toast.error('Failed to process payment.');
-        }
-    };
-    
     return (
         <div className="container mx-auto p-4">
             <ToastContainer />
@@ -88,9 +102,9 @@ const PayRoll = () => {
                                     <button
                                         className="btn btn-sm btn-success"
                                         onClick={() => handlePay(request)}
-                                        disabled={!!request.paymentDate} // Disable if already paid
+                                        disabled={request.status === 'Paid'}
                                     >
-                                        {request.paymentDate ? 'Paid' : 'Pay'}
+                                        {request.status === 'Paid' ? 'Paid' : 'Pay'}
                                     </button>
                                 </td>
                             </tr>
@@ -98,8 +112,18 @@ const PayRoll = () => {
                     </tbody>
                 </table>
             )}
+            {isModalOpen && (
+                <Elements stripe={stripePromise}>
+                    <PaymentModal
+                        request={selectedRequest}
+                        onClose={() => setIsModalOpen(false)}
+                        onSuccess={handlePaymentSuccess}
+                    />
+                </Elements>
+            )}
         </div>
     );
 };
 
 export default PayRoll;
+

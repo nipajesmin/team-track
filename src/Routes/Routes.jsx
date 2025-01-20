@@ -15,6 +15,7 @@ import AllEmployeeList from "../pages/Dashboard/Admin/AllEmployeeList";
 import PayRoll from "../pages/Dashboard/Admin/PayRoll";
 import AdminRoute from "./AdminRoute";
 import Details from "../pages/Dashboard/hr/Details";
+import PaymentModal from "../pages/Dashboard/Admin/PaymentModal";
 
 export const router = createBrowserRouter([
     {
@@ -64,6 +65,10 @@ export const router = createBrowserRouter([
                     {
                         path:"/dashboard/details/:id",
                         element: <Details></Details>
+                    },
+                    {
+                        path:"/dashboard/payroll/payment-modal",
+                        element: <PaymentModal></PaymentModal>
                     },
                 ]
             },
