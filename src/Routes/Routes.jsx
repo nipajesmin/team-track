@@ -13,6 +13,8 @@ import EmployeeList from "../pages/Dashboard/hr/EmployeeList";
 import Progress from "../pages/Dashboard/hr/Progress";
 import AllEmployeeList from "../pages/Dashboard/Admin/AllEmployeeList";
 import PayRoll from "../pages/Dashboard/Admin/PayRoll";
+import AdminRoute from "./AdminRoute";
+import Details from "../pages/Dashboard/hr/Details";
 
 export const router = createBrowserRouter([
     {
@@ -53,11 +55,15 @@ export const router = createBrowserRouter([
                     },
                     {
                         path:"/dashboard/all-employee-list",
-                        element: <AllEmployeeList></AllEmployeeList>
+                        element: <AdminRoute><AllEmployeeList></AllEmployeeList></AdminRoute>
                     },
                     {
                         path:"/dashboard/pay-roll",
-                        element: <PayRoll></PayRoll>
+                        element: <AdminRoute><PayRoll></PayRoll></AdminRoute>
+                    },
+                    {
+                        path:"/dashboard/details/:id",
+                        element: <Details></Details>
                     },
                 ]
             },

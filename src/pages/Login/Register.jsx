@@ -29,7 +29,7 @@ const Register = () => {
 
 
     const onSubmit = async (data) => {
-        console.log("Form Data Submitted:", data);
+        // console.log("Form Data Submitted:", data);
         setUploading(true);
 
         const formData = new FormData();
@@ -42,11 +42,14 @@ const Register = () => {
             });
 
             const result = await response.json();
+            // console.log(result)
             if (result.success) {
                 const photoURL = result.data.display_url;
 
                 createUser(data.email, data.password)
+
                     .then(() => {
+                        //   console.log("updated")
                         updateUserProfile({ displayName: data.name, photoURL })
                             .then(() => {
                                 const userInfo = {
@@ -60,12 +63,14 @@ const Register = () => {
                                     verified_status: false, // Default value
                                 };
 
+
                                 axiosPublic.post('/users', userInfo)
                                     .then(res => {
                                         if (res.data.insertedId) {
                                             toast.success('Registration successful!', { position: 'top-center' });
                                             reset();
-                                            setTimeout(() => navigate('/'), 3000);
+                                            navigate('/');
+
                                         }
                                     })
                                     .catch(error => toast.error('Failed to save user to database.', { position: 'top-center' }));

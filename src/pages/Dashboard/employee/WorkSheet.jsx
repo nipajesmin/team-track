@@ -19,7 +19,8 @@ const WorkSheet = () => {
         hoursWorked: '',
         date: new Date(),
     });
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editTask, setEditTask] = useState(null);
 
     // useEffect(() => {
     //     if (user?.email) {
@@ -89,6 +90,63 @@ const WorkSheet = () => {
     //     setTasks(tasks.filter((task) => task.id !== id));
     // };
 
+    const openEditModal = (task) => {
+        setEditTask(task);
+        setIsModalOpen(true);
+    };
+
+    const closeEditModal = () => {
+        setIsModalOpen(false);
+        setEditTask(null);
+    };
+
+    // const handleEditSubmit = async (e) => {
+    //     e.preventDefault();
+    //     const updatedTask = { ...editTask, date: editTask.date.toISOString() };
+    //     try {
+    //         await axiosSecure.put(`/tasks/${editTask._id}`, updatedTask);
+    //         closeEditModal();
+    //         refetch();
+    //     } catch (error) {
+    //         console.error('Error updating task:', error);
+    //     }
+    // };
+
+    const handleEditSubmit = async (e) => {
+        e.preventDefault();
+    
+        const updatedTask = {
+            ...editTask,
+            date: new Date(editTask.date).toISOString(), // Convert to ISO string
+        };
+    
+      //  console.log('Updated Task:', updatedTask); // Debug log
+    
+        try {
+            const response = await axiosSecure.put(`/tasks/${editTask._id}`, updatedTask);
+          //  console.log('Update Response:', response); // Debug log
+            closeEditModal();
+            refetch();
+        } catch (error) {
+            console.error('Error updating task:', error);
+        }
+    };
+    
+    
+
+    const handleEditChange = (e) => {
+        const { name, value } = e.target;
+        setEditTask({ ...editTask, [name]: value });
+    };
+
+    // const handleEditDateChange = (date) => {
+    //     setEditTask({ ...editTask, date });
+    // };
+
+    const handleEditDateChange = (date) => {
+        setEditTask({ ...editTask, date: new Date(date) });
+    };
+    
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Task Management</h1>
@@ -169,7 +227,8 @@ const WorkSheet = () => {
                             </td>
                             <td className="border border-gray-300 px-4 py-2">
                                 <button
-                                    //   onClick={() => handleEdit(task.id)}
+                                    //  onClick={() => handleEdit(task.id)}
+                                    onClick={() => openEditModal(task)}
                                     className="btn btn-sm btn-warning mr-2"
                                 >
                                     Edit
@@ -186,9 +245,71 @@ const WorkSheet = () => {
                     ))}
                 </tbody>
             </table>
+            {isModalOpen && (
+                <div className="modal modal-open"> {/* Add 'modal-open' */}
+                    <div className="modal-box">
+                        <h2 className="text-xl font-bold mb-4">Edit Task</h2>
+                        <form onSubmit={handleEditSubmit}>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Task</span>
+                                </label>
+                                <select
+                                    name="task"
+                                    value={editTask.task}
+                                    onChange={handleEditChange}
+                                    className="select select-bordered"
+                                >
+                                    <option value="Sales">Sales</option>
+                                    <option value="Support">Support</option>
+                                    <option value="Content">Content</option>
+                                    <option value="Paper-work">Paper-work</option>
+                                </select>
+                            </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Hours Worked</span>
+                                </label>
+                                <input
+                                    type="number"
+                                    name="hoursWorked"
+                                    value={editTask.hoursWorked}
+                                    onChange={handleEditChange}
+                                    className="input input-bordered"
+                                    placeholder="Hours"
+                                />
+                            </div>
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Date</span>
+                                </label>
+                                <DatePicker
+                                    selected={new Date(editTask.date)}
+                                    onChange={handleEditDateChange}
+                                    className="input input-bordered"
+                                    dateFormat="yyyy-MM-dd"
+                                />
+                            </div>
+                            <div className="modal-action">
+                                <button type="submit" className="btn btn-primary">
+                                    Update
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={closeEditModal}
+                                    className="btn btn-secondary"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };
 
-export default WorkSheet;
+export default WorkSheet;
 

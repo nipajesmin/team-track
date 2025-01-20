@@ -42,6 +42,7 @@ const AuthProvider = ({ children }) => {
         return updateProfile(auth.currentUser, updatedData)
 
     }
+ 
 
     useEffect(() => {
         // const unSubscribe = onAuthStateChanged(auth, async currentUser => {
@@ -57,6 +58,7 @@ const AuthProvider = ({ children }) => {
                     .then(res => {
                         if (res.data.token) {
                             localStorage.setItem('access-token', res.data.token)
+                            setLoading(false);// akhn dsi
                         }
                     })
 
@@ -64,8 +66,9 @@ const AuthProvider = ({ children }) => {
             else {
                 // remover token from client side(maybe stored in local storage)
                 localStorage.removeItem('access-token')
+                setLoading(false);
             }
-            setLoading(false);
+
         })
         return () => {
             unSubscribe();

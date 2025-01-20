@@ -2,9 +2,11 @@ import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { FaClipboard, FaHistory, FaUsers, FaUser, FaChartLine, FaList, FaMoneyCheck } from 'react-icons/fa';
 import useAdmin from '../../hooks/useAdmin';
+import useHR from '../../hooks/useHR';
 
 const Dashboard = () => {
     const [isAdmin] = useAdmin();
+    const [isHR] = useHR();
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -18,6 +20,7 @@ const Dashboard = () => {
                     <ul className="p-4 space-y-4">
                         {isAdmin ? (
                             <>
+                                {/* Admin Routes */}
                                 <li>
                                     <NavLink
                                         to="/dashboard/admin"
@@ -56,36 +59,10 @@ const Dashboard = () => {
                                         All Employee List
                                     </NavLink>
                                 </li>
-
                             </>
-                        ) : (
+                        ) : isHR ? (
                             <>
-                                <li>
-                                    <NavLink
-                                        to="/dashboard/work-sheet"
-                                        className={({ isActive }) =>
-                                            `flex items-center gap-2 px-4 py-2 rounded-md ${
-                                                isActive ? 'bg-violet-500' : 'hover:bg-violet-600'
-                                            }`
-                                        }
-                                    >
-                                        <FaClipboard />
-                                        Worksheet
-                                    </NavLink>
-                                </li>
-                                <li>
-                                    <NavLink
-                                        to="/dashboard/payment-history"
-                                        className={({ isActive }) =>
-                                            `flex items-center gap-2 px-4 py-2 rounded-md ${
-                                                isActive ? 'bg-violet-500' : 'hover:bg-violet-600'
-                                            }`
-                                        }
-                                    >
-                                        <FaHistory />
-                                        Payment History
-                                    </NavLink>
-                                </li>
+                                {/* HR Routes */}
                                 <li>
                                     <NavLink
                                         to="/dashboard/employee-list"
@@ -125,8 +102,36 @@ const Dashboard = () => {
                                         Progress
                                     </NavLink>
                                 </li>
-                                
-                                
+                            </>
+                        ) : (
+                            <>
+                                {/* Employee Routes */}
+                                <li>
+                                    <NavLink
+                                        to="/dashboard/work-sheet"
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-2 px-4 py-2 rounded-md ${
+                                                isActive ? 'bg-violet-500' : 'hover:bg-violet-600'
+                                            }`
+                                        }
+                                    >
+                                        <FaClipboard />
+                                        Worksheet
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink
+                                        to="/dashboard/payment-history"
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-2 px-4 py-2 rounded-md ${
+                                                isActive ? 'bg-violet-500' : 'hover:bg-violet-600'
+                                            }`
+                                        }
+                                    >
+                                        <FaHistory />
+                                        Payment History
+                                    </NavLink>
+                                </li>
                             </>
                         )}
                     </ul>
@@ -137,11 +142,11 @@ const Dashboard = () => {
                     <Outlet />
                 </div>
             </div>
-
-            
         </div>
     );
 };
 
 export default Dashboard;
+
+
 

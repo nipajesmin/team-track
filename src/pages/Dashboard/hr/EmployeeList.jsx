@@ -4,6 +4,7 @@ import { FaCheck, FaTimes } from 'react-icons/fa';
 import { useQuery } from '@tanstack/react-query';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from 'react-router-dom';
 
 
 const EmployeeList = () => {
@@ -137,6 +138,7 @@ const EmployeeList = () => {
                                 </button>
                             </td> */}
                             <td className="border border-gray-300 px-4 py-2 text-center">
+                                
                                 <button
                                     onClick={() => handlePay(employee)}
                                     className={`btn btn-sm ${employee.verified_status ? 'btn-success' : 'btn-gray'}`}
@@ -146,11 +148,14 @@ const EmployeeList = () => {
                                 </button>
                             </td>
                             <td className="border border-gray-300 px-4 py-2 text-center">
-                                <button
+                            <Link to={`/dashboard/details/${employee._id}`}>
+                            <button
                                     className="btn btn-sm bg-violet-600"
                                 >
                                     Details
                                 </button>
+                            </Link>
+                                
                             </td>
                         </tr>
                     ))}
