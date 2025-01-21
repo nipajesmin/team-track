@@ -255,7 +255,7 @@ const Register = () => {
                         </div> */}
                     </form>
                     <p className="ml-4 mb-4 pl-12">
-                        Already have an account? Please <Link to="/signin" className="text-blue-600">SignIn</Link>
+                        Already have an account? Please <Link to="/login" className="text-blue-600">SignIn</Link>
                     </p>
                 </div>
             </div>

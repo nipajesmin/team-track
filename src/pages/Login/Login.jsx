@@ -19,7 +19,7 @@ const Login = () => {
         queryKey: ['employees'],
         queryFn: async () => {
             const response = await axiosSecure.get('/users');
-            return response.data.filter(user => user.verified_status || user.role === 'HR'); // Only show verified users
+            return response.data.filter(user => user.verified_status || user.role === 'HR' || user.role === 'Admin'); // Only show verified users
         },
     });
 

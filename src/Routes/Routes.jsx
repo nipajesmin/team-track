@@ -79,7 +79,7 @@ export const router = createBrowserRouter([
                     },
                     {
                         path:"/dashboard/allMessages",
-                        element: <AdminMessage></AdminMessage>
+                        element: <AdminRoute><AdminMessage></AdminMessage></AdminRoute>
                     },
                 ]
             },

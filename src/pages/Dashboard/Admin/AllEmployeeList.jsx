@@ -26,10 +26,10 @@ const AllEmployeeList = () => {
         try {
             await axiosSecure.patch(`/users/${id}/role`, { role: 'HR' });
             refetch(); // Refresh the employee list
-            alert('Employee promoted to HR successfully.');
+            toast.success('Employee promoted to HR successfully.');
         } catch (error) {
             console.error('Error promoting employee:', error);
-            alert('Failed to promote employee to HR.');
+            toast.error('Failed to promote employee to HR.');
         }
     };
 
