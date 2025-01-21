@@ -23,14 +23,14 @@ const Dashboard = () => {
                                 {/* Admin Routes */}
                                 <li>
                                     <NavLink
-                                        to="/dashboard/admin"
+                                        to="/dashboard"
                                         className={({ isActive }) =>
                                             `flex items-center gap-2 px-4 py-2 rounded-md ${
                                                 isActive ? 'bg-violet-500' : 'hover:bg-violet-600'
                                             }`
                                         }
                                     >
-                                        Admin Route
+                                        Admin Home
                                     </NavLink>
                                 </li>
                                 <li>
@@ -63,6 +63,18 @@ const Dashboard = () => {
                         ) : isHR ? (
                             <>
                                 {/* HR Routes */}
+                                <li>
+                                    <NavLink
+                                        to="/dashboard"
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-2 px-4 py-2 rounded-md ${
+                                                isActive ? 'bg-violet-500' : 'hover:bg-violet-600'
+                                            }`
+                                        }
+                                    >
+                                        Hr Home
+                                    </NavLink>
+                                </li>
                                 <li>
                                     <NavLink
                                         to="/dashboard/employee-list"
@@ -106,6 +118,18 @@ const Dashboard = () => {
                         ) : (
                             <>
                                 {/* Employee Routes */}
+                                <li>
+                                    <NavLink
+                                        to="/dashboard"
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-2 px-4 py-2 rounded-md ${
+                                                isActive ? 'bg-violet-500' : 'hover:bg-violet-600'
+                                            }`
+                                        }
+                                    >
+                                        Employee Home
+                                    </NavLink>
+                                </li>
                                 <li>
                                     <NavLink
                                         to="/dashboard/work-sheet"

@@ -9,6 +9,8 @@ const AllEmployeeList = () => {
     const [selectedEmployee, setSelectedEmployee] = useState(null); // State for the selected employee
     const [newSalary, setNewSalary] = useState(null); // State for the new salary
     const [isSalaryModalOpen, setIsSalaryModalOpen] = useState(false); // State for salary modal visibility
+    const [isFiringModalOpen, setIsFiringModalOpen] = useState(false); // State for firing modal visibility
+
 
     // Fetch all employees
     const { data: employees = [], isLoading, isError, error, refetch } = useQuery({
@@ -75,6 +77,30 @@ const AllEmployeeList = () => {
         }
     };
 
+      // Open firing modal and set selected employee
+      const handleFireEmployee = (employee) => {
+        setSelectedEmployee(employee);
+        setIsFiringModalOpen(true);
+    };
+
+    // Confirm firing employee
+    const confirmFireEmployee = async () => {
+        try {
+            const response = await axiosSecure.patch(`/users/${selectedEmployee._id}/fire`, {
+                fired: true,
+            });
+
+            if (response.status === 200) {
+                toast.success('Employee fired successfully.');
+                setIsFiringModalOpen(false); // Close the modal
+                refetch(); // Refresh the employee list
+            }
+        } catch (error) {
+            console.error('Error firing employee:', error);
+            toast.error('Failed to fire employee.');
+        }
+    };
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -123,13 +149,25 @@ const AllEmployeeList = () => {
                                     'Already HR'
                                 )}
                             </td>
-                            <td className="border border-gray-300 px-4 py-2">
+                            {/* <td className="border border-gray-300 px-4 py-2">
                                 <button
                                     // onClick={() => handleFireEmployee(employee._id)}
                                     className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
                                 >
                                     Fire
                                 </button>
+                            </td> */}
+                            <td className="border border-gray-300 px-4 py-2">
+                                {employee.fired ? (
+                                    <span className="text-red-500 font-bold">Fired</span>
+                                ) : (
+                                    <button
+                                        onClick={() => handleFireEmployee(employee)}
+                                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                                    >
+                                        Fire
+                                    </button>
+                                )}
                             </td>
                         </tr>
                     ))}
@@ -164,6 +202,31 @@ const AllEmployeeList = () => {
                                 className="btn btn-sm btn-success"
                             >
                                 Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+             {/* Firing Confirmation Modal */}
+             {isFiringModalOpen && selectedEmployee && (
+                <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+                        <h3 className="text-xl font-bold mb-4">Confirm Firing</h3>
+                        <p className="mb-4">
+                            Are you sure you want to fire <strong>{selectedEmployee.name}</strong>?
+                        </p>
+                        <div className="flex justify-end space-x-2">
+                            <button
+                                onClick={() => setIsFiringModalOpen(false)}
+                                className="btn btn-sm btn-gray"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={confirmFireEmployee}
+                                className="btn btn-sm btn-danger"
+                            >
+                                Confirm
                             </button>
                         </div>
                     </div>

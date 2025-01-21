@@ -16,6 +16,7 @@ import PayRoll from "../pages/Dashboard/Admin/PayRoll";
 import AdminRoute from "./AdminRoute";
 import Details from "../pages/Dashboard/hr/Details";
 import PaymentModal from "../pages/Dashboard/Admin/PaymentModal";
+import AdminHome from "../pages/Dashboard/Admin/AdminHome";
 
 export const router = createBrowserRouter([
     {
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
                 path:"/dashboard",
                 element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
                 children:[
+                    {
+                        path:"/dashboard",
+                        element: <AdminHome></AdminHome>
+                    },
                     {
                         path:"/dashboard/work-sheet",
                         element: <WorkSheet></WorkSheet>
