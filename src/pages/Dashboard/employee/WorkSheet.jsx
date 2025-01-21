@@ -50,23 +50,29 @@ const WorkSheet = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         if (formData.hoursWorked) {
-            const taskData = { ...formData, email: user.email, date: formData.date.toISOString() };
-
+            const taskData = { 
+                ...formData, 
+                email: user.email, 
+                name: user.displayName || "Anonymous", // Include the user's name
+                date: formData.date.toISOString() 
+            };
+    
             try {
                 await axiosSecure.post('tasks', taskData);
-
+    
                 // Reset the form
                 setFormData({ task: 'Sales', hoursWorked: '', date: new Date() });
-
+    
                 // Trigger refetch to reload tasks
                 refetch();
             } catch (error) {
-                console.error('Error adding task:', error);
+              //  console.error('Error adding task:', error);
             }
         }
     };
+    
 
 
 
@@ -79,7 +85,7 @@ const WorkSheet = () => {
                 refetch(); // Refetch tasks after deletion
             }
         } catch (error) {
-            console.error('Error deleting task:', error);
+          //  console.error('Error deleting task:', error);
         }
     };
 
