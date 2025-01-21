@@ -5,8 +5,8 @@ import React, { useContext, useState } from 'react';
 import logo from '../../../public/logo.png'
 import { AuthContext } from '../../providers/AuthProvider';
 const Navbar = () => {
-     const { user, signOutUser } = useContext(AuthContext);
-     const location = useLocation();
+    const { user, signOutUser } = useContext(AuthContext);
+    const location = useLocation();
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
 
@@ -51,11 +51,17 @@ const Navbar = () => {
 
 
                     <Link
-                    to="/dashboard"
-                    className={`hover:text-yellow-300 transition ${isActive('/allSportsEquipment') ? 'font-bold text-yellow-500' : ''}`}
-                >
-                    Dashboard
-                </Link>
+                        to="/dashboard"
+                        className={`hover:text-yellow-300 transition ${isActive('/allSportsEquipment') ? 'font-bold text-yellow-500' : ''}`}
+                    >
+                        Dashboard
+                    </Link>
+                    <Link
+                        to="/contactUs"
+                        className={`hover:text-yellow-300 transition ${isActive('/allSportsEquipment') ? 'font-bold text-yellow-500' : ''}`}
+                    >
+                        Contact Us
+                    </Link>
                     {/* <Link
                     to="/gallery"
                     className={`hover:text-yellow-300 transition ${isActive('/allSportsEquipment') ? 'font-bold text-yellow-500' : ''}`}
@@ -68,56 +74,56 @@ const Navbar = () => {
                 {/* User Section */}
                 <div className="mt-4 md:mt-0 flex items-center space-x-4 relative">
                     {user && user.email ? (
-                    <div className="relative">
-                        <img
-                            src={user?.photoURL}
-                            alt="User"
-                            className="h-8 w-8 rounded-full object-cover cursor-pointer"
-                            title={user?.displayName || 'User'} // Tooltip with user's name
-                            onClick={toggleDropdown} // Toggle dropdown on click
-                        />
-                        {/* Dropdown Menu */}
-                        {dropdownOpen && (
-                            <div
-                                className="absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg z-10"
-                                onMouseLeave={closeDropdown} // Optional: Close dropdown when mouse leaves
-                            >
-                                {/* <Link
+                        <div className="relative">
+                            <img
+                                src={user?.photoURL}
+                                alt="User"
+                                className="h-8 w-8 rounded-full object-cover cursor-pointer"
+                                title={user?.displayName || 'User'} // Tooltip with user's name
+                                onClick={toggleDropdown} // Toggle dropdown on click
+                            />
+                            {/* Dropdown Menu */}
+                            {dropdownOpen && (
+                                <div
+                                    className="absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg z-10"
+                                    onMouseLeave={closeDropdown} // Optional: Close dropdown when mouse leaves
+                                >
+                                    {/* <Link
                                     to="/myFood"
                                     className="block px-4 py-2 hover:bg-gray-200 transition"
                                     onClick={closeDropdown} // Close dropdown on link click
                                 >
                                     My Foods
                                 </Link> */}
-                                
-                                <button
-                                    onClick={() => {
-                                        signOutUser();
-                                        closeDropdown();
-                                    }}
-                                    className="block w-full text-left px-4 py-2 hover:bg-gray-200 transition"
-                                >
-                                    Sign Out
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                     ) : ( 
-                    <div className="flex space-x-4">
-                        <Link
-                            to="/login"
-                            className={`text-black hover:text-slate-50 transition ${isActive('/signin') ? 'font-bold text-yellow-500' : ''}`}
-                        >
-                            Log In
-                        </Link>
-                        <Link
-                            to="/register"
-                            className={`text-black hover:text-slate-50 transition ${isActive('/register') ? 'font-bold text-yellow-500' : ''}`}
-                        >
-                            Register
-                        </Link>
-                    </div>
-                     )} 
+
+                                    <button
+                                        onClick={() => {
+                                            signOutUser();
+                                            closeDropdown();
+                                        }}
+                                        className="block w-full text-left px-4 py-2 hover:bg-gray-200 transition"
+                                    >
+                                        Sign Out
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="flex space-x-4">
+                            <Link
+                                to="/login"
+                                className={`text-black hover:text-slate-50 transition ${isActive('/signin') ? 'font-bold text-yellow-500' : ''}`}
+                            >
+                                Log In
+                            </Link>
+                            <Link
+                                to="/register"
+                                className={`text-black hover:text-slate-50 transition ${isActive('/register') ? 'font-bold text-yellow-500' : ''}`}
+                            >
+                                Register
+                            </Link>
+                        </div>
+                    )}
 
                 </div>
             </div>

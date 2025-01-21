@@ -59,6 +59,19 @@ const Dashboard = () => {
                                         All Employee List
                                     </NavLink>
                                 </li>
+                                <li>
+                                    <NavLink
+                                        to="/dashboard/allMessages"
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-2 px-4 py-2 rounded-md ${
+                                                isActive ? 'bg-violet-500' : 'hover:bg-violet-600'
+                                            }`
+                                        }
+                                    >
+                                        <FaList />
+                                        All Messages
+                                    </NavLink>
+                                </li>
                             </>
                         ) : isHR ? (
                             <>

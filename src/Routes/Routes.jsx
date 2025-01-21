@@ -17,6 +17,8 @@ import AdminRoute from "./AdminRoute";
 import Details from "../pages/Dashboard/hr/Details";
 import PaymentModal from "../pages/Dashboard/Admin/PaymentModal";
 import AdminHome from "../pages/Dashboard/Admin/AdminHome";
+import ContactUs from "../pages/contact/ContactUs";
+import AdminMessage from "../pages/Dashboard/Admin/AdminMessage";
 
 export const router = createBrowserRouter([
     {
@@ -75,9 +77,17 @@ export const router = createBrowserRouter([
                         path:"/dashboard/payroll/payment-modal",
                         element: <PaymentModal></PaymentModal>
                     },
+                    {
+                        path:"/dashboard/allMessages",
+                        element: <AdminMessage></AdminMessage>
+                    },
                 ]
             },
             
+            {
+                path:"contactUs",
+                element:<ContactUs></ContactUs>
+            }
             
             
         ]

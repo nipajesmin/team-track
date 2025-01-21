@@ -3,6 +3,7 @@ import Header from './Header';
 import Service from './Service';
 import Testimonials from './Testimonials';
 import Features from './Features';
+import WhyChooseUs from './WhyChooseUs';
 
 const Home = () => {
     return (
@@ -10,6 +11,7 @@ const Home = () => {
             <Header></Header>
             <Service></Service>
             <Features></Features>
+            <WhyChooseUs></WhyChooseUs>
             <Testimonials></Testimonials>
         </div>
     );
