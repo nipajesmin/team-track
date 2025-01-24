@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useAxiosPublic from '../../hooks/useAxiosPublic';
 
+
 const GoogleLogin = () => {
     const { signInWithGoogle, setUser } = useContext(AuthContext);
     const axiosPublic = useAxiosPublic();
@@ -14,13 +15,24 @@ const GoogleLogin = () => {
             .then(result => {
                 const user = result.user;
                 console.log(user);
-                const userInfo = {
-                    name: result.user?.displayName, 
-                    email: result.user?.email,
-                    role: 'Employee',
-                    photoURL: result.user?.photoURL, // Image URL from imgbb
+                // const userInfo = {
+                //     name: result.user?.displayName, 
+                //     email: result.user?.email,
+                //     role: 'Employee',
+                //     photoURL: result.user?.photoURL, // Image URL from imgbb
                    
+                // };
+                const userInfo = {
+                    name: result.user?.displayName || 'No Name',
+                    email: result.user?.email || 'No Email',
+                    role: 'Employee',
+                    photoURL: result.user?.photoURL || 'No Photo',
+                    bankAccountNumber: 'Not Provided',
+                    designation: 'Not Assigned',
+                    salary: 0, // Default salary
+                    verified_status: false,
                 };
+                
                 axiosPublic.post('/users', userInfo)
                 .then(res =>{
 

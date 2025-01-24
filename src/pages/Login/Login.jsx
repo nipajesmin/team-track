@@ -8,7 +8,7 @@ import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
 
 const Login = () => {
-    const { signInUser, setUser, signInWithGoogle } = useContext(AuthContext);
+    const { signInUser, setUser, signInWithGoogle , signOutUser } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
     const axiosSecure = useAxiosSecure();
@@ -19,7 +19,7 @@ const Login = () => {
         queryKey: ['employees'],
         queryFn: async () => {
             const response = await axiosSecure.get('/users');
-            return response.data.filter(user => user.verified_status || user.role === 'HR' || user.role === 'Admin'); // Only show verified users
+            return response.data.filter(user => user.verified_status || user.role === 'HR'); // Only show verified users
         },
     });
 
@@ -58,7 +58,7 @@ const Login = () => {
         try {
             const result = await signInUser(email, password);
             const user = result.user;
-            setUser(user);
+            
 
             // Check if the user is fired
             const loggedInUser = employees.find(emp => emp.email === user.email);
@@ -67,19 +67,19 @@ const Login = () => {
                 // If the user is fired, log them out and show an error message
                 toast.error('Access denied. User is fired.', { position: 'top-center' });
                 // Log out the user
-                await signOutUser(); // Call your sign-out function
+                await signOutUser(); 
                 return;
             }
 
+            setUser(user);
             // Show success toast
             toast.success('Login successful!', { position: 'top-center' });
 
             // Navigate after showing toast
             setTimeout(() => {
                 navigate(from, { replace: true });
-            }, 2000); // Delay navigation by 2 seconds
+            }, 2000); 
         } catch (error) {
-            // Show error toast
             toast.error(error.message || 'Login failed!', { position: 'top-center' });
         }
     };
