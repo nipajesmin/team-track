@@ -22,6 +22,8 @@ import AdminMessage from "../pages/Dashboard/Admin/AdminMessage";
 import Faq from "../pages/Faq/Faq"
 import RulesAndRegulations from "../pages/rules/RulesAndRegulations";
 import EmployeeProfile from "../pages/Dashboard/employee/EmployeeProfile";
+import HrProfile from "../pages/Dashboard/hr/HrProfile";
+
 
 
 export const router = createBrowserRouter([
@@ -68,6 +70,10 @@ export const router = createBrowserRouter([
                     {
                         path:"/dashboard/progress",
                         element: <Progress></Progress>
+                    },
+                    {
+                        path:"/dashboard/hrProfile",
+                        element: <HrProfile></HrProfile>
                     },
                     {
                         path:"/dashboard/all-employee-list",

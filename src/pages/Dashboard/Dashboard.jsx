@@ -116,6 +116,19 @@ const Dashboard = () => {
                                 </li>
                                 <li>
                                     <NavLink
+                                        to="/dashboard/hrProfile"
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-2 px-4 py-2 rounded-md ${
+                                                isActive ? 'bg-violet-500' : 'hover:bg-violet-600'
+                                            }`
+                                        }
+                                    >
+                                        <FaUser />
+                                        Hr Profile
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink
                                         to="/dashboard/progress"
                                         className={({ isActive }) =>
                                             `flex items-center gap-2 px-4 py-2 rounded-md ${
