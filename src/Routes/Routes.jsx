@@ -20,6 +20,7 @@ import AdminHome from "../pages/Dashboard/Admin/AdminHome";
 import ContactUs from "../pages/contact/ContactUs";
 import AdminMessage from "../pages/Dashboard/Admin/AdminMessage";
 import Faq from "../pages/Faq/Faq"
+import RulesAndRegulations from "../pages/rules/RulesAndRegulations";
 
 export const router = createBrowserRouter([
     {
@@ -92,6 +93,10 @@ export const router = createBrowserRouter([
             {
                 path:"faq",
                 element:<Faq></Faq>
+            },
+            {
+                path:"rules",
+                element:<RulesAndRegulations></RulesAndRegulations>
             }
             
             
