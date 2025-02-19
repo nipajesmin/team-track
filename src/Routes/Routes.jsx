@@ -19,6 +19,7 @@ import PaymentModal from "../pages/Dashboard/Admin/PaymentModal";
 import AdminHome from "../pages/Dashboard/Admin/AdminHome";
 import ContactUs from "../pages/contact/ContactUs";
 import AdminMessage from "../pages/Dashboard/Admin/AdminMessage";
+import Faq from "../pages/Faq/Faq"
 
 export const router = createBrowserRouter([
     {
@@ -87,6 +88,10 @@ export const router = createBrowserRouter([
             {
                 path:"contactUs",
                 element:<ContactUs></ContactUs>
+            },
+            {
+                path:"faq",
+                element:<Faq></Faq>
             }
             
             

@@ -62,6 +62,12 @@ const Navbar = () => {
                     >
                         Contact Us
                     </Link>
+                    <Link
+                        to="/faq"
+                        className={`hover:text-yellow-300 transition ${isActive('/allSportsEquipment') ? 'font-bold text-yellow-500' : ''}`}
+                    >
+                        FAQ
+                    </Link>
                     {/* <Link
                     to="/gallery"
                     className={`hover:text-yellow-300 transition ${isActive('/allSportsEquipment') ? 'font-bold text-yellow-500' : ''}`}
