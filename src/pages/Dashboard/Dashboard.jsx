@@ -61,6 +61,19 @@ const Dashboard = () => {
                                 </li>
                                 <li>
                                     <NavLink
+                                        to="/dashboard/adminProfile"
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-2 px-4 py-2 rounded-md ${
+                                                isActive ? 'bg-violet-500' : 'hover:bg-violet-600'
+                                            }`
+                                        }
+                                    >
+                                        <FaList />
+                                        Admin Profile
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink
                                         to="/dashboard/allMessages"
                                         className={({ isActive }) =>
                                             `flex items-center gap-2 px-4 py-2 rounded-md ${

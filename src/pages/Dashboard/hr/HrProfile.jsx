@@ -27,8 +27,8 @@ const HrProfile = () => {
 
     if (!employee) return <p>No profile found</p>;
     return (
-        <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center">
-        <h1 className="text-2xl font-bold mb-4">Employee Profile</h1>
+    <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center">
+        <h1 className="text-2xl font-bold mb-4">Hr Profile</h1>
         <div className="bg-white p-6 rounded-lg shadow-md w-96">
             <img
                 src={employee.photoURL}

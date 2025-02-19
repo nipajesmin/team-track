@@ -23,6 +23,7 @@ import Faq from "../pages/Faq/Faq"
 import RulesAndRegulations from "../pages/rules/RulesAndRegulations";
 import EmployeeProfile from "../pages/Dashboard/employee/EmployeeProfile";
 import HrProfile from "../pages/Dashboard/hr/HrProfile";
+import AdminProfile from "../pages/Dashboard/Admin/AdminProfile";
 
 
 
@@ -78,6 +79,10 @@ export const router = createBrowserRouter([
                     {
                         path:"/dashboard/all-employee-list",
                         element: <AdminRoute><AllEmployeeList></AllEmployeeList></AdminRoute>
+                    },
+                    {
+                        path:"/dashboard/adminProfile",
+                        element: <AdminProfile></AdminProfile>
                     },
                     {
                         path:"/dashboard/pay-roll",

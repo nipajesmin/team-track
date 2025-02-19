@@ -132,7 +132,7 @@ const AllEmployeeList = () => {
                             <td className="border border-gray-300 px-4 py-2 text-center">
                                 <button
                                     onClick={() => handleSalaryAdjustment(employee)}
-                                    className="btn btn-sm btn-warning"
+                                    className="btn btn-sm bg-purple-900 text-white hover:bg-purple-600"
                                 >
                                     Adjust Salary
                                 </button>
@@ -141,7 +141,7 @@ const AllEmployeeList = () => {
                                 {employee.role !== 'HR' ? (
                                     <button
                                          onClick={() => handleMakeHR(employee._id)}
-                                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                                        className="bg-purple-900 text-white px-4 py-2 rounded hover:bg-purple-600"
                                     >
                                         Promote to HR
                                     </button>
