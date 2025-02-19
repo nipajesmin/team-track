@@ -21,6 +21,8 @@ import ContactUs from "../pages/contact/ContactUs";
 import AdminMessage from "../pages/Dashboard/Admin/AdminMessage";
 import Faq from "../pages/Faq/Faq"
 import RulesAndRegulations from "../pages/rules/RulesAndRegulations";
+import EmployeeProfile from "../pages/Dashboard/employee/EmployeeProfile";
+
 
 export const router = createBrowserRouter([
     {
@@ -60,6 +62,10 @@ export const router = createBrowserRouter([
                         element: <EmployeeList></EmployeeList>
                     },
                     {
+                        path:"/dashboard/employeeProfile",
+                        element: <EmployeeProfile></EmployeeProfile>
+                    },
+                    {
                         path:"/dashboard/progress",
                         element: <Progress></Progress>
                     },
@@ -83,6 +89,7 @@ export const router = createBrowserRouter([
                         path:"/dashboard/allMessages",
                         element: <AdminRoute><AdminMessage></AdminMessage></AdminRoute>
                     },
+                    
                 ]
             },
             

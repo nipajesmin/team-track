@@ -169,6 +169,19 @@ const Dashboard = () => {
                                         Payment History
                                     </NavLink>
                                 </li>
+                                <li>
+                                    <NavLink
+                                        to="/dashboard/employeeProfile"
+                                        className={({ isActive }) =>
+                                            `flex items-center gap-2 px-4 py-2 rounded-md ${
+                                                isActive ? 'bg-violet-500' : 'hover:bg-violet-600'
+                                            }`
+                                        }
+                                    >
+                                        <FaHistory />
+                                        Employee Profile
+                                    </NavLink>
+                                </li>
                             </>
                         )}
                     </ul>
